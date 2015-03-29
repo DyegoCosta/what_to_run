@@ -1,5 +1,3 @@
-# Coverage collector for minitest
-
 require 'coverage'
 require 'json'
 

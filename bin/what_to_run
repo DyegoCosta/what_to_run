@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'what_to_run'
+
+puts WhatToRun.predict
