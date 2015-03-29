@@ -1,91 +1,97 @@
 require 'json'
 require 'shellwords'
-
 require 'rugged'
 require 'set'
 
 module WhatToRun
-  class << self
-    def predict
-      repo = Rugged::Repository.new '.'
-      lines_to_run = Set.new
+  extend self
 
-      repo.index.diff.each_patch { |patch|
-        file = patch.delta.old_file[:path]
+  def predict
+    lines_to_run.inject([]) do |tests, (file, line)|
+      cov_map[File.expand_path(file)][line].each do |desc|
+        tests += Array(desc)
+      end
+      tests
+    end
+  end
 
-        patch.each_hunk { |hunk|
-          hunk.each_line { |line|
-            case line.line_origin
-            when :addition
-              lines_to_run << [file, line.new_lineno]
-            when :deletion
-              lines_to_run << [file, line.old_lineno]
-            when :context
-              # do nothing
-            end
-          }
+  def lines_to_run
+    repo = Rugged::Repository.new '.'
+    lines_to_run = Set.new
+
+    repo.index.diff.each_patch { |patch|
+      file = patch.delta.old_file[:path]
+
+      patch.each_hunk { |hunk|
+        hunk.each_line { |line|
+          case line.line_origin
+          when :addition
+            lines_to_run << [file, line.new_lineno]
+          when :deletion
+            lines_to_run << [file, line.old_lineno]
+          when :context
+            # do nothing
+          end
         }
       }
+    }
 
-      cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
+    lines_to_run
+  end
 
-      File.open('run_log.json') do |f|
-        # Read in the coverage info
-        JSON.parse(f.read).each do |args|
-          if args.length == 4 # for Minitest
-            desc = args.first(2).join('#')
-          else                # for RSpec
-            desc = args.first
-          end
+  def diff before, after
+    after.each_with_object({}) do |(file_name,line_cov), res|
+      before_line_cov = before[file_name]
 
-          before, after = args.last(2)
+      # skip arrays that are exactly the same
+      next if before_line_cov == line_cov
 
-          # calculate the per test coverage
-          delta = diff before, after
-
-          delta.each_pair do |file, lines|
-            file_map = cov_map[file]
-
-            lines.each_with_index do |val, i|
-              # skip lines that weren't executed
-              next unless val && val > 0
-
-              # add the test name to the map. Multiple tests can execute the same
-              # line, so we need to use an array.
-              file_map[i + 1] << desc
-            end
-          end
+      # subtract the old coverage from the new coverage
+      cov = line_cov.zip(before_line_cov).map do |line_after, line_before|
+        if line_after
+          line_after - line_before
+        else
+          line_after
         end
       end
 
-      lines_to_run.inject([]) do |tests, (file, line)|
-        cov_map[File.expand_path(file)][line].each do |desc|
-          tests << desc
+      # add the "diffed" coverage to the hash
+      res[file_name] = cov
+    end
+  end
+
+  def cov_map
+    cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
+
+    File.open('run_log.json') do |f|
+      # Read in the coverage info
+      JSON.parse(f.read).each do |args|
+        if args.length == 4 # for Minitest
+          desc = args.first(2).join('#')
+        else                # for RSpec
+          desc = args.first
         end
 
-        tests
+        before, after = args.last(2)
+
+        # calculate the per test coverage
+        delta = diff before, after
+
+        delta.each_pair do |file, lines|
+          file_map = cov_map[file]
+
+          lines.each_with_index do |val, i|
+            # skip lines that weren't executed
+            next unless val && val > 0
+
+            # add the test name to the map. Multiple tests can execute the same
+            # line, so we need to use an array.
+            file_map[i + 1] << desc
+          end
+        end
       end
     end
 
-    def diff before, after
-      after.each_with_object({}) do |(file_name,line_cov), res|
-        before_line_cov = before[file_name]
-
-        # skip arrays that are exactly the same
-        next if before_line_cov == line_cov
-
-        # subtract the old coverage from the new coverage
-        cov = line_cov.zip(before_line_cov).map do |line_after, line_before|
-          if line_after
-            line_after - line_before
-          else
-            line_after
-          end
-        end
-
-        # add the "diffed" coverage to the hash
-        res[file_name] = cov
-      end
-    end
+    cov_map
   end
 end
