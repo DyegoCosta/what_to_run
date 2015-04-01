@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'what_to_run'
-  s.version     = '0.0.0'
+  s.version     = '0.0.1.pre'
   s.date        = '2015-03-30'
 
   s.summary     = 'Regression test selection'
@@ -15,6 +15,6 @@ Gem::Specification.new do |s|
   s.extensions  = %w[ext/coverage_peeker/extconf.rb]
 
   s.executables << 'what_to_run'
-
+  s.required_ruby_version = '~> 2.3'
   s.add_runtime_dependency 'rugged', '~> 0.21', '>= 0.21.0'
 end
