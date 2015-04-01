@@ -4,5 +4,6 @@ gemspec
 
 group :test do
   gem 'rake'
+  gem 'rake-compiler'
   gem 'rspec', '~> 3.2'
 end
