@@ -6,7 +6,6 @@ This lib is based on [@tenderlove](https://github.com/tenderlove) idea and guida
 
 ## Requirements
 
-- Ruby 2.3 (currently trunk Ruby)
 - Project must be inside a Git repository
 
 ## Installation

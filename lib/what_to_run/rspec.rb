@@ -1,6 +1,8 @@
-require 'coverage'
 require 'json'
 require 'rspec'
+
+require 'coverage'
+require 'coverage_peeker'
 
 LOGS = []
 Coverage.start
@@ -10,8 +12,8 @@ RSpec.configuration.after(:suite) {
 }
 
 RSpec.configuration.around(:example) do |example|
-  before = Coverage.peek_result
+  before = CoveragePeeker.peek_result
   example.call
-  after = Coverage.peek_result
+  after = CoveragePeeker.peek_result
   LOGS << [ example.full_description, before, after ]
 end

@@ -1,5 +1,6 @@
-require 'coverage'
 require 'json'
+require 'coverage'
+require 'coverage_peeker'
 
 Coverage.start
 
@@ -16,9 +17,9 @@ class Minitest::Runnable
     alias :old_run_one_method :run_one_method
 
     def run_one_method klass, method_name, reporter
-      before = Coverage.peek_result
+      before = CoveragePeeker.peek_result
       old_run_one_method klass, method_name, reporter
-      after = Coverage.peek_result
+      after = CoveragePeeker.peek_result
       LOGS << [ klass.name, method_name.to_s, before, after ]
     end
   end
