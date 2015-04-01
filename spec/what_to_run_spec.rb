@@ -1,5 +1,5 @@
-require 'spec_helper'
 require 'json'
+require 'what_to_run'
 
 describe WhatToRun do
   describe 'predict' do
