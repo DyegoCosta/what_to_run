@@ -1,67 +1,78 @@
-# Regression Test Selection
+# What To Run
 
-This is a demo repository for regression test selection.  You will need Ruby 2.3 to use this (which is currently trunk Ruby).
+What To Run is a lib for regression test selection, use it to predict which tests you should run when you make any modification on your codebase.
 
-## Make it go with Minitest
+This lib is based on [@tenderlove](https://github.com/tenderlove) idea and guidance, make sure to read his [blog post](http://tenderlovemaking.com/2015/02/13/predicting-test-failues.html) on the subject.
 
-To try it with Minitest, do:
+## Requirements
 
-```
-$ COLLECTION=1 ruby -I lib spec/whatever_test.rb
-```
+- Ruby 2.3 (currently trunk Ruby)
+- Project must be inside a Git repository
 
-This will create the initial coverage information.  Then modify `lib/my_thing.rb` so that the diff looks like this:
+## Installation
 
-```patch
-diff --git a/lib/my_thing.rb b/lib/my_thing.rb
-index 806deff..eb057b9 100644
---- a/lib/my_thing.rb
-+++ b/lib/my_thing.rb
-@@ -4,7 +4,7 @@ class Whatever
-   end
- 
-   def bar
--    "bar #{@foo}"
-+    raise
-   end
- 
-   def baz
-```
-
-Now to predict which tests will fail, do this:
+Add this line to your application's Gemfile:
 
 ```
-$ ruby what_to_run.rb
+gem 'what_to_run'
 ```
 
-## Make it go with RSpec
-
-To try it with RSpec, do:
+And then execute
 
 ```
-$ COLLECTION=1 rspec spec/whatever_spec.rb
+$ bundle
 ```
 
-This will create the initial coverage information.  Then modify `lib/my_thing.rb` so that the diff looks like this:
-
-```patch
-diff --git a/lib/my_thing.rb b/lib/my_thing.rb
-index 806deff..eb057b9 100644
---- a/lib/my_thing.rb
-+++ b/lib/my_thing.rb
-@@ -4,7 +4,7 @@ class Whatever
-   end
- 
-   def bar
--    "bar #{@foo}"
-+    raise
-   end
- 
-   def baz
-```
-
-Now to predict which tests will fail, do this:
+Or install it yourself as:
 
 ```
-$ ruby what_to_run.rb
+gem install what_to_run
 ```
+
+## Usage
+
+Require the lib with:
+
+Minitest
+
+```
+require 'what_to_run/minitest'
+```
+
+RSpec
+
+```
+require 'what_to_run/rspec'
+```
+
+Run your tests on a clean git branch
+
+Minitest
+
+```
+$ COLLECTION=1 bundle exec rake test
+```
+
+RSpec
+
+```
+$ COLLECTION=1 bundle exec rspec
+```
+
+This will create the initial coverage information. Then make your desired modifications on your code.
+
+Now to predict which tests is likely fail, run this:
+
+```
+$ what_to_run
+```
+
+:warning: A `run_log.json` file will be created in the current directory, you might want to include it in your `.gitignore`.
+
+## Contributing
+
+Open an [issue](https://github.com/DyegoCosta/what_to_run/issues) or fork it and submit a [pull-request](https://help.github.com/articles/using-pull-requests/).
+
+## License
+
+What To Run is released under the [MIT License](http://www.opensource.org/licenses/MIT).
