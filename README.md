@@ -1,5 +1,7 @@
 # What To Run
 
+[![Build Status](https://travis-ci.org/DyegoCosta/what_to_run.svg?branch=master)](https://travis-ci.org/DyegoCosta/what_to_run)
+
 What To Run is a lib for regression test selection, use it to predict which tests you should run when you make any modification on your codebase.
 
 This lib is based on [@tenderlove](https://github.com/tenderlove) idea and guidance, make sure to read his [blog post](http://tenderlovemaking.com/2015/02/13/predicting-test-failues.html) on the subject.
