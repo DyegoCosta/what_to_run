@@ -27,7 +27,7 @@ $ bundle
 Or install it yourself as:
 
 ```
-gem install what_to_run
+$ gem install what_to_run
 ```
 
 ## Usage
@@ -46,7 +46,7 @@ RSpec
 require 'what_to_run/rspec'
 ```
 
-Run your tests on a clean git branch
+Run your tests with COLLECTION=1 on a clean git branch
 
 Minitest
 
@@ -68,6 +68,7 @@ Now to predict which tests is likely fail, run this:
 $ what_to_run
 ```
 
+:warning: Currently working on scalability improvements. Still no recommended for use on gigantic codebases.  
 :warning: A `run_log.json` file will be created in the current directory, you might want to include it in your `.gitignore`.
 
 ## Contributing
