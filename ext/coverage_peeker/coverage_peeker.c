@@ -1,5 +1,7 @@
 #include <ruby.h>
 
+VALUE CoveragePeeker = Qnil;
+
 extern VALUE rb_get_coverages(void);
 
 static int
@@ -36,6 +38,6 @@ rb_coverage_peek_result(VALUE klass)
 void
 Init_coverage_peeker(void)
 {
-  VALUE rb_mCoveragePeek = rb_define_module("CoveragePeeker");
-  rb_define_module_function(rb_mCoveragePeek, "peek_result", rb_coverage_peek_result, 0);
+  VALUE rb_mCoveragePeeker = rb_define_module("CoveragePeeker");
+  rb_define_module_function(rb_mCoveragePeeker, "peek_result", rb_coverage_peek_result, 0);
 }
