@@ -1,2 +1,4 @@
 tmp
 .bundle
+lib/coverage_peeker*
+Gemfile.lock
