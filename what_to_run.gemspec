@@ -10,8 +10,9 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/DyegoCosta/what_to_run'
   s.license     = 'MIT'
 
-  s.files       = 'README.md'
-  s.files       += Dir.glob("lib/**/*.*")
+  s.files       = ['README.md', 'Rakefile']
+  s.files       += Dir.glob("ext/**/*.*")
+  s.files       += Dir.glob("lib/**/*.rb")
   s.extensions  = %w[ext/coverage_peeker/extconf.rb]
 
   s.executables << 'what_to_run'
