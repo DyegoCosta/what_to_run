@@ -1,5 +1,7 @@
 # What To Run
 
+[![Join the chat at https://gitter.im/DyegoCosta/what_to_run](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/DyegoCosta/what_to_run?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/DyegoCosta/what_to_run.svg?branch=master)](https://travis-ci.org/DyegoCosta/what_to_run)
 
 What To Run is a lib for regression test selection, use it to predict which tests you should run when you make any modification on your codebase.
