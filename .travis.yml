@@ -1,6 +1,14 @@
 language: ruby
+
 rvm:
   - ruby-1.9.3
   - ruby-2.0
   - ruby-2.1
   - ruby-2.2
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/13bf90cba11e7fc3cf40
+    on_success: change
+    on_failure: always
