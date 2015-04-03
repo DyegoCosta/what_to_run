@@ -1,6 +1,7 @@
 require 'json'
 require 'rugged'
 require 'set'
+require_relative 'what_to_run/tracker'
 
 module WhatToRun
   extend self
@@ -54,29 +55,22 @@ module WhatToRun
   def cov_map
     cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
 
-    File.open('run_log.json') do |f|
-      JSON.parse(f.read).each do |cov_info|
-        before, after = cov_info.last(2)
-        desc = build_test_desc(cov_info)
+    Tracker.read do |cov_info|
+      before, after = cov_info.last(2)
+      desc = cov_info.first
 
-        delta = cov_delta(before, after)
+      delta = cov_delta(before, after)
 
-        delta.each_pair do |file, lines|
-          file_map = cov_map[file]
+      delta.each_pair do |file, lines|
+        file_map = cov_map[file]
 
-          lines.each_with_index do |val, i|
-            file_map[i + 1] << desc if line_executed?(val)
-          end
+        lines.each_with_index do |val, i|
+          file_map[i + 1] << desc if line_executed?(val)
         end
       end
     end
 
     cov_map
-  end
-
-  def build_test_desc(cov_info)
-    using_minitest = cov_info.length == 4
-    using_minitest ? cov_info.first(2).join('#') : cov_info.first
   end
 
   def line_executed?(line)

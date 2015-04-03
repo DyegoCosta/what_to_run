@@ -1,19 +1,15 @@
-require 'json'
-require 'rspec'
-
 require 'coverage'
-require 'coverage_peeker'
 
-LOGS = []
+require 'coverage_peeker'
+require 'what_to_run/tracker'
+
 Coverage.start
 
-RSpec.configuration.after(:suite) {
-  File.open('run_log.json', 'w') { |f| f.write JSON.dump LOGS }
-}
+RSpec.configuration.after(:suite) {WhatToRun::Tracker.dump}
 
 RSpec.configuration.around(:example) do |example|
   before = CoveragePeeker.peek_result
   example.call
   after = CoveragePeeker.peek_result
-  LOGS << [ example.full_description, before, after ]
+  WhatToRun::Tracker.track before, after, example.full_description
 end

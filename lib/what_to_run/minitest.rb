@@ -1,17 +1,14 @@
-require 'json'
 require 'coverage'
+
 require 'coverage_peeker'
+require 'what_to_run/tracker'
 
 Coverage.start
 
 require 'minitest'
 
 class Minitest::Runnable
-  LOGS = []
-
-  Minitest.after_run {
-    File.open('run_log.json', 'w') { |f| f.write JSON.dump LOGS }
-  }
+  Minitest.after_run {Tracker.dump}
 
   class << self
     alias :old_run_one_method :run_one_method
@@ -20,7 +17,7 @@ class Minitest::Runnable
       before = CoveragePeeker.peek_result
       old_run_one_method klass, method_name, reporter
       after = CoveragePeeker.peek_result
-      LOGS << [ klass.name, method_name.to_s, before, after ]
+      Tracker.track "#{klass.name}##{method_name.to_s}", before, after
     end
   end
 end
