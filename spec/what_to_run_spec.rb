@@ -41,31 +41,23 @@ describe WhatToRun do
 
     before do
       allow(WhatToRun::Tracker).to \
-        receive(:read) {|&block| run_log_data.each(&block)}
+        receive(:read) {|&block| coverage_delta.each(&block)}
     end
 
-    let(:run_log_data) do
+    let(:coverage_delta) do
       [
         [
           'Test Foo',
           {
-            'path/to/foo.rb' => [nil, 0, 1, 0, 1, nil],
-            'path/to/bar.rb' => [nil, nil, nil, 0, nil, nil]
-          },
-          {
-            'path/to/foo.rb' => [nil, 1, 1, 1, 2, nil],
+            'path/to/foo.rb' => [nil, 1,   1,   1, 2,   nil],
             'path/to/bar.rb' => [nil, nil, nil, 1, nil, nil]
           }
         ],
         [
           'Test Bar',
           {
-            'path/to/foo.rb' => [nil, nil, 1, nil, 1, nil],
-            'path/to/bar.rb' => [nil, 0, 0, 1, nil, nil]
-          },
-          {
-            'path/to/foo.rb' => [nil, nil, 1, nil, 1, nil],
-            'path/to/bar.rb' => [nil, 1, 1, 2, nil, nil]
+            'path/to/foo.rb' => [nil, nil, nil, 1, 1,   nil],
+            'path/to/bar.rb' => [nil, 1,   1,   2, nil, nil]
           }
         ]
       ]
@@ -73,7 +65,7 @@ describe WhatToRun do
 
     it 'maps only coveraged lines' do
       {
-        foo: [2, 4, 5],
+        foo: [2, 3, 4, 5],
         bar: [2, 3, 4]
       }.each_pair do |file, lines|
         expect(cov_map["path/to/#{file}.rb"].keys).to \
@@ -81,14 +73,14 @@ describe WhatToRun do
       end
     end
 
-    it 'maps lines covered by Foo test' do
-      [2, 4, 5].each do |line|
+    it 'maps lines covered just by Foo test' do
+      [2, 3].each do |line|
         expect(cov_map['path/to/foo.rb'][line]).to \
           match_array ['Test Foo']
       end
     end
 
-    it 'maps lines covered by Bar test' do
+    it 'maps lines covered just by Bar test' do
       [2, 3].each do |line|
         expect(cov_map['path/to/bar.rb'][line]).to \
           match_array ['Test Bar']

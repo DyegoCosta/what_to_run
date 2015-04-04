@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake-compiler', '~> 0.9', '>= 0.9.0'
 
   s.add_runtime_dependency 'rugged', '~> 0.21', '>= 0.21.0'
+  s.add_runtime_dependency 'sqlite3', '~> 1.3', '>= 1.3.10'
 end
