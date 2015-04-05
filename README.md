@@ -39,27 +39,27 @@ Require the lib with:
 Minitest
 
 ```
-require 'what_to_run/minitest' if ENV['COLLECTION']
+require 'what_to_run/minitest'
 ```
 
 RSpec
 
 ```
-require 'what_to_run/rspec' if ENV['COLLECTION']
+require 'what_to_run/rspec'
 ```
 
-Run your tests with COLLECTION=1 on a clean git branch
+Run your tests with COLLECT=1 on a clean git branch
 
 Minitest
 
 ```
-$ COLLECTION=1 bundle exec rake test
+$ COLLECT=1 bundle exec rake test
 ```
 
 RSpec
 
 ```
-$ COLLECTION=1 bundle exec rspec
+$ COLLECT=1 bundle exec rspec
 ```
 
 This will create the initial coverage information. Then make your desired modifications on your code.

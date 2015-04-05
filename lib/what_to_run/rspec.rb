@@ -1,22 +1,25 @@
-require 'coverage'
+configure = -> do
+  require 'coverage'
+  require 'coverage_peeker'
+  require 'what_to_run/tracker'
 
-require 'coverage_peeker'
-require 'what_to_run/tracker'
+  WhatToRun::Tracker.start
 
-WhatToRun::Tracker.start
+  Coverage.start
 
-Coverage.start
+  RSpec.configuration.after(:suite) do
+    WhatToRun::Tracker.finish
+    Coverage.result
+  end
 
-RSpec.configuration.after(:suite) do
-  WhatToRun::Tracker.finish
-  Coverage.result
+  RSpec.configuration.around(:each) do |example|
+    before = CoveragePeeker.peek_result
+    example.call
+    after = CoveragePeeker.peek_result
+
+    WhatToRun::Tracker.track \
+      example.metadata[:full_description], before, after
+  end
 end
 
-RSpec.configuration.around(:each) do |example|
-  before = CoveragePeeker.peek_result
-  example.call
-  after = CoveragePeeker.peek_result
-
-  WhatToRun::Tracker.track \
-    example.metadata[:full_description], before, after
-end
+configure.call if ENV['COLLECT']
