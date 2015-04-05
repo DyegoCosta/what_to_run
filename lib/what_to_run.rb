@@ -15,10 +15,11 @@ module WhatToRun
   end
 
   def lines_to_run
-    repo = Rugged::Repository.new('.')
+    repo = Rugged::Repository.discover('.')
     lines_to_run = Set.new
 
     repo.index.diff.each_patch do |patch|
+      puts 'diffed'
       file = patch.delta.old_file[:path]
 
       patch.each_hunk do |hunk|
