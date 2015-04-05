@@ -22,7 +22,7 @@ module WhatToRun
           Differ.coverage_delta(before, after)
 
         DB.execute 'insert into coverage VALUES(?, ?)',
-          description, SQLite3::Blob.new(coverage)
+          [description, SQLite3::Blob.new(coverage)]
       end
 
       def finish
