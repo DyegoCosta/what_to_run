@@ -12,9 +12,11 @@ RSpec.configuration.after(:suite) do
   Coverage.result
 end
 
-RSpec.configuration.around(:example) do |example|
+RSpec.configuration.around(:each) do |example|
   before = CoveragePeeker.peek_result
   example.call
   after = CoveragePeeker.peek_result
-  WhatToRun::Tracker.track example.full_description, before, after
+
+  WhatToRun::Tracker.track \
+    example.metadata[:full_description], before, after
 end
