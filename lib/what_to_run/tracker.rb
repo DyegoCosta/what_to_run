@@ -30,7 +30,7 @@ module WhatToRun
       end
 
       def read
-        rows = DB.execute "select description, log from coverage;"
+        rows = DB.execute 'select description, log from coverage'
         rows.each {|row| yield [row[0], Marshal.load(row[1])]}
       end
 

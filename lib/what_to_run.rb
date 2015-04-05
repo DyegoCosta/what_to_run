@@ -19,7 +19,6 @@ module WhatToRun
     lines_to_run = Set.new
 
     repo.index.diff.each_patch do |patch|
-      puts 'diffed'
       file = patch.delta.old_file[:path]
 
       patch.each_hunk do |hunk|
@@ -40,19 +39,21 @@ module WhatToRun
   end
 
   def cov_map
-    cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
+    return @cov_map if @cov_map
+
+    @cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
 
     Tracker.read do |desc, cov_delta|
       cov_delta.each_pair do |file, lines|
-        file_map = cov_map[file]
+        file_map = @cov_map[file]
 
-        lines.each_with_index do |val, i|
-          file_map[i + 1] << desc if line_executed?(val)
+        lines.each_with_index do |line, i|
+          file_map[i + 1] << desc if line_executed?(line)
         end
       end
     end
 
-    cov_map
+    @cov_map
   end
 
   def line_executed?(line)
