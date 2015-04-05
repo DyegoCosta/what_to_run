@@ -39,13 +39,13 @@ Require the lib with:
 Minitest
 
 ```
-require 'what_to_run/minitest'
+require 'what_to_run/minitest' if ENV['COLLECTION']
 ```
 
 RSpec
 
 ```
-require 'what_to_run/rspec'
+require 'what_to_run/rspec' if ENV['COLLECTION']
 ```
 
 Run your tests with COLLECTION=1 on a clean git branch
