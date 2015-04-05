@@ -19,7 +19,7 @@ class Minitest::Runnable
       before = CoveragePeeker.peek_result
       old_run_one_method klass, method_name, reporter
       after = CoveragePeeker.peek_result
-      WhaToRun::Tracker.track "#{klass.name}##{method_name.to_s}", before, after
+      WhatToRun::Tracker.track "#{klass.name}##{method_name.to_s}", before, after
     end
   end
 end
