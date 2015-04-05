@@ -70,9 +70,6 @@ Now to predict which tests is likely fail, run this:
 $ what_to_run
 ```
 
-:warning: Currently working on scalability improvements. Still no recommended for use on gigantic codebases.  
-:warning: A `run_log.json` file will be created in the current directory, you might want to include it in your `.gitignore`.
-
 ## Contributing
 
 Open an [issue](https://github.com/DyegoCosta/what_to_run/issues) or fork it and submit a [pull-request](https://help.github.com/articles/using-pull-requests/).
