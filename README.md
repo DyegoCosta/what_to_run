@@ -34,7 +34,7 @@ $ gem install what_to_run
 
 ## Usage
 
-Require the lib with:
+Require it after requiring your test framework and before load your files to be tested and your test suite config:
 
 Minitest
 
@@ -64,10 +64,18 @@ $ COLLECT=1 bundle exec rspec
 
 This will create the initial coverage information. Then make your desired modifications on your code.
 
-Now to predict which tests is likely fail, run this:
+Now to run the tests that could reveal faults do the following
+
+Minitest
 
 ```
-$ what_to_run
+$ what_to_run minitest
+```
+
+Rspec
+
+```
+$ what_to_run rspec
 ```
 
 ## Contributing
