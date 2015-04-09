@@ -45,9 +45,9 @@ module WhatToRun
       # The possible param value that this method might receive
       # are the following
       #
-      # @param result positive => should be run the test
-      # @param result negative => should be run the test
-      # @param result nil      => should be run the test
+      # @param result positive => should run the test
+      # @param result negative => should run the test
+      # @param result nil      => should run the test
       # @param result zero     => should not run the test
       #
       # This method will convert negative and nil values to 1,
