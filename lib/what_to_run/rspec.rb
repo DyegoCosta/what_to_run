@@ -3,9 +3,11 @@ configure = -> do
   require 'coverage_peeker'
   require 'what_to_run/tracker'
 
-  WhatToRun::Tracker.start
-
   Coverage.start
+
+  RSpec.configuration.before(:suite) do
+    WhatToRun::Tracker.start
+  end
 
   RSpec.configuration.after(:suite) do
     WhatToRun::Tracker.finish

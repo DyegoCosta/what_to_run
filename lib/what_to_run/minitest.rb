@@ -3,12 +3,13 @@ configure = -> do
   require 'coverage_peeker'
   require 'what_to_run/tracker'
 
-  WhatToRun::Tracker.start
   Coverage.start
 
   require 'minitest'
 
   class Minitest::Runnable
+    Minitest.before_run {WhatToRun::Tracker.start}
+
     Minitest.after_run {WhatToRun::Tracker.finish}
 
     class << self

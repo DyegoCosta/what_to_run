@@ -1,4 +1,5 @@
 require 'sqlite3'
+require 'coverage_peeker'
 require_relative 'differ'
 
 module WhatToRun
@@ -15,11 +16,13 @@ module WhatToRun
             log blob
           )
         SQL
+
+        @before_suite = CoveragePeeker.peek_result
       end
 
       def track(description, before, after)
         coverage = Marshal.dump \
-          Differ.coverage_delta(before, after)
+          Differ.coverage_delta(before, after, @before_suite)
 
         DB.execute 'insert into coverage VALUES(?, ?)',
           [description, SQLite3::Blob.new(coverage)]
