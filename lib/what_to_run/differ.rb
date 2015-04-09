@@ -3,12 +3,11 @@ module WhatToRun
     class << self
       ##
       # Gives the delta beteween the coverage result
-      # before and after a test run and before start
+      # before and after a test run and before starting
       # the test suite
       #
       # Results in the lines that may trigger the test
       # that gave the after result
-
       def coverage_delta(cov_before, cov_after, cov_before_suite)
         cov_after.each_with_object({}) do |(file_name, lines_cov_after), delta|
           lines_cov_before = cov_before[file_name]
@@ -28,7 +27,6 @@ module WhatToRun
       # with the coverage before the test suite in order
       # to include the uncovered lines to all tests that
       # touch this file
-
       def lines_cov_delta(before_suite, before, after)
         delta = diff before_suite, diff(before, after)
         delta.map(&method(:normalize_cov_result))
@@ -44,13 +42,27 @@ module WhatToRun
       end
 
       ##
-      # Marks lines to be ran
+      # The possible param value that this method might receive
+      # are the following
       #
-      # @param result positive => covered
-      # @param result negative => covered
-      # @param result nil      => not covered
-      # @param result zero     => not covered; within a method
-
+      # @param result positive => should be run the test
+      # @param result negative => should be run the test
+      # @param result nil      => should be run the test
+      # @param result zero     => should not run the test
+      #
+      # This method will convert negative and nil values to 1,
+      # which will make them represent lines that should be run.
+      # The positive lines can be kept as they are since this mean
+      # they will be run.
+      #
+      # The only exception case is the 0 result which will be kept
+      # as it is so we don't run lines within the not called methods
+      #
+      # This introduces false positives to avoid missing tests that
+      # depends on lines that are evaluated when the file is required
+      #
+      # @return 1 to represent that this line should trigger the current test
+      # @return 0 to represent that this line should not trigger the current test
       def normalize_cov_result(result)
         result.nil? || result.to_i < 0 ? 1 : result
       end
