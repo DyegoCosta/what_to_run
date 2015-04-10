@@ -1,31 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'optparse'
-require 'shellwords'
 require 'what_to_run'
 
-test_framework = ARGV[0]
+WhatToRun::CLI.new.run ARGV
 
-options = {}
-OptionParser.new do |opts|
-  opts.banner = 'Usage: what_to_run <framework> [options]'
-
-  opts.on('-e', '--exec EXECUTABLE', 'Alternate test runner executable') do |v|
-    options[:exec] = v
-  end
-
-  opts.on('-h', '--help', 'Prints this help') do
-    puts opts
-    exit
-  end
-end.parse!
-
-case test_framework
-when 'rspec'
-  require 'what_to_run/rspec/runner'
-  WhatToRun::RSpec::Runner.new(options).run
-when nil
-  abort 'Must specify a test framework'
-else
-  abort "Unsupported test framework: #{test_framework}"
-end
