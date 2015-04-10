@@ -13,7 +13,7 @@ module WhatToRun
       begin
         runner = load_runner(framework)
         runner.new(options).run
-      rescue NameError, LoadError
+      rescue LoadError
         abort "Unsupported test framework: #{framework}"
       end
     end
@@ -43,9 +43,10 @@ module WhatToRun
 
     def load_runner(framework)
       require "what_to_run/#{framework}/runner"
-      WhatToRun.const_get RUNNERS[framework]
+      klass_name = "WhatToRun::#{RUNNERS[framework]}::Runner"
+      klass_name.split('::').inject(Object) {|x, y| x.const_get(y.to_sym)}
     end
 
-    RUNNERS = {'rspec' => 'RSpec::Runner', 'minitest' => 'Minitest::Runner'}
+    RUNNERS = {'rspec' => 'RSpec', 'minitest' => 'Minitest'}
   end
 end
