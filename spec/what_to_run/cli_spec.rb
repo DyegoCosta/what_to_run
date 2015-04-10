@@ -2,7 +2,7 @@ require 'what_to_run/cli'
 require 'what_to_run/rspec/runner'
 
 describe WhatToRun::CLI do
-  describe 'run' do
+  describe '#run' do
     it 'aborts when no test framework is provided' do
       expect {subject.run(nil)}.to \
         raise_error 'Must specify a test framework'
@@ -14,7 +14,7 @@ describe WhatToRun::CLI do
     end
   end
 
-  describe 'parse_options!' do
+  describe '#parse_options!' do
     def call(*args)
       subject.send(:parse_options!, *args)
     end
@@ -28,7 +28,7 @@ describe WhatToRun::CLI do
     end
   end
 
-  describe 'load_runner' do
+  describe '#load_runner' do
     def call(type)
       subject.send(:load_runner, type)
     end

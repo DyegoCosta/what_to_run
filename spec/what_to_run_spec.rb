@@ -2,7 +2,7 @@ require 'json'
 require 'what_to_run'
 
 describe WhatToRun do
-  describe 'predict' do
+  describe '.predict' do
     let(:lines_to_run) do
       [['/path/to/foo.rb', 7], ['/path/to/bar.rb', 4]]
     end
@@ -36,7 +36,7 @@ describe WhatToRun do
     end
   end
 
-  describe 'cov_map' do
+  describe '.cov_map' do
     let(:cov_map) {WhatToRun.cov_map}
 
     before do

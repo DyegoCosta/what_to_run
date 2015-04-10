@@ -3,7 +3,7 @@ require 'what_to_run/differ'
 describe WhatToRun::Differ do
   subject {WhatToRun::Differ}
 
-  describe 'coverage_delta' do
+  describe '.coverage_delta' do
     let(:before_suite) do
       {
         'foo.rb' =>               [nil, 1,   0,   0, 0,   nil],
@@ -53,7 +53,7 @@ describe WhatToRun::Differ do
         match_array([1, 3, 1])
     end
 
-    describe 'normalize_cov_result' do
+    describe '.normalize_cov_result' do
       it 'turns negative values into 1' do
         expect(subject.normalize_cov_result(-1)).to eq(1)
       end
