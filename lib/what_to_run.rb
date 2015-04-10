@@ -6,6 +6,7 @@ require_relative 'what_to_run/tracker'
 
 module WhatToRun
   autoload :CLI, 'what_to_run/cli'
+  autoload :VERSION, 'what_to_run/version'
 
   class << self
     def predict
