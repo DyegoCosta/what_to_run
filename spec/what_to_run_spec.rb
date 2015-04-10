@@ -1,4 +1,3 @@
-require 'json'
 require 'what_to_run'
 
 describe WhatToRun do

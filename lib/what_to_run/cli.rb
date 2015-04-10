@@ -46,6 +46,6 @@ module WhatToRun
       WhatToRun.const_get RUNNERS[framework]
     end
 
-    RUNNERS = {'rspec' => 'RSpec::Runner'}
+    RUNNERS = {'rspec' => 'RSpec::Runner', 'minitest' => 'Minitest::Runner'}
   end
 end
