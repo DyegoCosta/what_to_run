@@ -11,7 +11,7 @@ module WhatToRun
       options = parse_options!(argv)
 
       begin
-        runner = load_runner(framework)
+        runner = load_runner framework.downcase
         runner.new(options).run
       rescue LoadError
         abort "Unsupported test framework: #{framework}"
