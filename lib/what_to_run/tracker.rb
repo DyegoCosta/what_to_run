@@ -1,10 +1,13 @@
 require 'sqlite3'
+require 'fileutils'
+
 require 'coverage_peeker'
 require_relative 'differ'
 
 module WhatToRun
   class Tracker
-    DB = SQLite3::Database.open '/tmp/run_log.db'
+    FileUtils.mkdir_p('.what_to_run')
+    DB = SQLite3::Database.open '.what_to_run/run_log.db'
 
     class << self
       def start
