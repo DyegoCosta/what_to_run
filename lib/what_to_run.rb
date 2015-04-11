@@ -1,6 +1,5 @@
-require 'json'
-require 'rugged'
 require 'set'
+require 'rugged'
 
 require_relative 'what_to_run/tracker'
 
@@ -11,25 +10,26 @@ module WhatToRun
   class << self
     def predict
       lines_to_run.inject(Set.new) do |tests, (file, line)|
-        path = File.expand_path(file)
-        tests += Array cov_map[path][line]
+        tests += Array cov_map[file][line]
       end
     end
 
     def lines_to_run
-      repo = Rugged::Repository.discover('.')
+      repository = Rugged::Repository.discover('.')
+      repository_root = File.expand_path("..", repository.path)
       lines_to_run = Set.new
 
-      repo.index.diff.each_patch do |patch|
+      repository.index.diff.each_patch do |patch|
         file = patch.delta.old_file[:path]
+        file_path = File.join(repository_root, file)
 
         patch.each_hunk do |hunk|
           hunk.each_line do |line|
             case line.line_origin
             when :addition
-              lines_to_run << [file, line.new_lineno]
+              lines_to_run << [file_path, line.new_lineno]
             when :deletion
-              lines_to_run << [file, line.old_lineno]
+              lines_to_run << [file_path, line.old_lineno]
             when :context
               # do nothing
             end
