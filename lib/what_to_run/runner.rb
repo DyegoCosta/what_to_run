@@ -4,6 +4,12 @@ module WhatToRun
   ##
   # Abstract base spec runner
   class Runner
+    attr_reader :executable, :collect
+
+    def initialize(exec:)
+      @executable = exec
+    end
+
     def run
       if predicted_examples.empty?
         exit 0
@@ -12,8 +18,14 @@ module WhatToRun
       end
     end
 
+    private
+
     def command
-      fail NotImplementedError, 'Subclass must override #command'
+      "#{executable} #{predicted_example_args}"
+    end
+
+    def predicted_example_args
+      fail NotImplementedError, 'Subclass must override #predicted_example_args'
     end
 
     def predicted_examples

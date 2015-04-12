@@ -16,31 +16,27 @@ describe WhatToRun::Minitest::Runner do
 
   it_behaves_like 'a runner'
 
-  describe '#command' do
-    let(:escaped_example_args) do
-      "TESTOPTS=\"--name\\=/\\^Calculator\\" \
+  describe '#predicted_example_args' do
+    it 'builds escaped args' do
+      escaped_args = "TESTOPTS=\"--name\\=/\\^Calculator\\" \
         "#test_one_plus_one_equals_two\\$\\|\\" \
         "^My\\ Calculator\\#test\\ two\\" \
         " times\\ two\\ equals\\ four\\$/\""
+
+      expect(runner.send(:predicted_example_args)).to eq(escaped_args)
+    end
+  end
+
+  describe '#executable' do
+    it 'uses default executable if none is given' do
+      expect(runner.send(:executable)).to \
+        eq('bundle exec rake test')
     end
 
-    subject { runner.command }
-
-    context 'with default executable' do
-      it 'is the base minitest executable with a name argument' do
-        is_expected.to \
-          eq("bundle exec rake test #{escaped_example_args}")
-      end
-    end
-
-    context 'with an alternate executable specified' do
-      let(:runner) do
-        described_class.new(exec: 'rake test')
-      end
-
-      it 'is the specified executable with a name argument' do
-        is_expected.to eq("rake test #{escaped_example_args}")
-      end
+    it 'uses custom executable if it is given' do
+      executable = 'rake test'
+      runner = described_class.new(exec: executable)
+      expect(runner.send(:executable)).to eq(executable)
     end
   end
 end

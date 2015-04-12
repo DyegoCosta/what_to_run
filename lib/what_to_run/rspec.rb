@@ -24,4 +24,4 @@ configure = -> do
   end
 end
 
-configure.call if ENV['COLLECT']
+configure.call if ENV['COLLECT'] && ENV['COLLECT'] != 'false'

@@ -3,19 +3,11 @@ require 'shellwords'
 
 module WhatToRun
   module RSpec
-    ##
-    # Runs RSpec with predicted examples
     class Runner < WhatToRun::Runner
-      DEFAULT_RSPEC_EXECUTABLE = 'bundle exec rspec'.freeze
-
-      attr_reader :rspec_executable
+      DEFAULT_EXECUTABLE = 'bundle exec rspec'.freeze
 
       def initialize(opts = {})
-        @rspec_executable = opts[:exec] || DEFAULT_RSPEC_EXECUTABLE
-      end
-
-      def command
-        "#{rspec_executable} #{predicted_example_args}"
+        super({exec: DEFAULT_EXECUTABLE}.merge(opts))
       end
 
       private

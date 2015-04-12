@@ -4,16 +4,10 @@ require 'shellwords'
 module WhatToRun
   module Minitest
     class Runner < WhatToRun::Runner
-      DEFAULT_MINITEST_EXECUTABLE = 'bundle exec rake test'.freeze
-
-      attr_reader :minitest_executable
+      DEFAULT_EXECUTABLE = 'bundle exec rake test'.freeze
 
       def initialize(opts = {})
-        @minitest_executable = opts[:exec] || DEFAULT_MINITEST_EXECUTABLE
-      end
-
-      def command
-        "#{minitest_executable} #{predicted_example_args}"
+        super({exec: DEFAULT_EXECUTABLE}.merge(opts))
       end
 
       private
