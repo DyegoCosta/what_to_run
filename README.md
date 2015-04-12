@@ -4,9 +4,22 @@
 
 [![Build Status](https://travis-ci.org/DyegoCosta/what_to_run.svg?branch=master)](https://travis-ci.org/DyegoCosta/what_to_run)
 
-What To Run is a lib for regression test selection, use it to predict which tests you should run when you make any modification on your codebase.
+What To Run is a lib for regression test selection for Ruby projects, use it to predict which tests you should run when you make any modification on your codebase.
 
-This lib is based on [@tenderlove](https://github.com/tenderlove) idea and guidance, make sure to read his [blog post](http://tenderlovemaking.com/2015/02/13/predicting-test-failues.html) on the subject.
+This lib was inspired by [@tenderlove](https://github.com/tenderlove) [blog post](tenderlove-post). Make sure to check it out.
+
+
+From the _[An Empirical Study of Regression Test Selection Techniques](rts-article)_ article:
+
+> Regression testing is the process of validating modified software to detect whether new errors
+have been introduced into previously tested code and to provide confidence that modifications
+are correct. Since regression testing is an expensive process, researchers have proposed
+regression test selection techniques as a way to reduce some of this expense. These techniques
+attempt to reduce costs by selecting and running only a subset of the test cases in a program’s
+existing test suite.
+
+[rts-article]: https://www.cs.umd.edu/~aporter/Docs/p184-graves.pdf
+[tenderlove-post]: http://tenderlovemaking.com/2015/02/13/predicting-test-failues.html
 
 ## Requirements
 
@@ -48,7 +61,7 @@ RSpec
 require 'what_to_run/rspec'
 ```
 
-Run your tests with COLLECT=1 on a clean git branch
+Run your full tests suite with COLLECT=1 on a **clean git branch**
 
 Minitest
 
@@ -66,16 +79,22 @@ This will create the initial coverage information. Then make your desired modifi
 
 Now to run the tests that could reveal faults do the following
 
-Minitest
-
 ```
-$ what_to_run minitest
+$ what_to_run <framework> [options]
 ```
 
-Rspec
+Supported frameworks are:
 
 ```
-$ what_to_run rspec
+rspec
+minitest
+```
+
+Options are:
+
+```
+-e, --exec EXECUTABLE            Alternate test runner executable
+-h, --help                       Prints this help
 ```
 
 ## Contributing
