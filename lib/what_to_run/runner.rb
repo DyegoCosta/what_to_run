@@ -6,8 +6,8 @@ module WhatToRun
   class Runner
     attr_reader :executable, :collect
 
-    def initialize(exec:)
-      @executable = exec
+    def initialize(opts = {})
+      @executable = opts.fetch(:exec)
     end
 
     def run

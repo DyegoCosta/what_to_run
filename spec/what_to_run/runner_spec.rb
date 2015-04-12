@@ -5,7 +5,8 @@ describe WhatToRun::Runner do
   let(:runner) { described_class.new(exec: executable) }
 
   it 'requires a executable' do
-    expect { described_class.new }.to raise_error
+    expect { described_class.new }.to \
+      raise_error(KeyError, 'key not found: :exec')
   end
 
   describe '#predicted_example_args' do
