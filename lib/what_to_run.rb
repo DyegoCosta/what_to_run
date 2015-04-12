@@ -41,21 +41,19 @@ module WhatToRun
     end
 
     def cov_map
-      return @cov_map if @cov_map
+      schema = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
 
-      @cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
-
-      Tracker.read do |desc, cov_delta|
+      @cov_map ||= Tracker.read.inject(schema) do |cov_map, (desc, cov_delta)|
         cov_delta.each_pair do |file, lines|
-          file_map = @cov_map[file]
+          file_map = cov_map[file]
 
           lines.each_with_index do |line, i|
             file_map[i + 1] << desc if line_executed?(line)
           end
         end
-      end
 
-      @cov_map
+        cov_map
+      end
     end
 
     def line_executed?(line)
