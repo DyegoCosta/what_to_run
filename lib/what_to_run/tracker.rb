@@ -7,7 +7,9 @@ require_relative 'differ'
 module WhatToRun
   class Tracker
     FileUtils.mkdir_p('.what_to_run')
-    DB = SQLite3::Database.open '.what_to_run/run_log.db'
+
+    DB = SQLite3::Database.open \
+      ".what_to_run/run_log#{ENV['TEST_ENV_NUMBER']}.db"
 
     class << self
       def start
@@ -36,15 +38,30 @@ module WhatToRun
       end
 
       def read
-        rows = DB.execute 'select description, log from coverage'
-        rows.map {|row| [row[0], Marshal.load(row[1])]}
+        query = 'select description, log from coverage'
+        databases_count = Dir['.what_to_run/*.db'].length
+
+        if databases_count > 1
+          attach_databases!(databases_count)
+          query += union_query(databases_count)
+        end
+
+        DB.execute(query).map {|row| [row[0], Marshal.load(row[1])]}
       end
 
-      def compact(coverage)
-        coverage.reject {|_, info| Array(info).compact.empty?}
+      def attach_databases!(count)
+        (2..count).each do |n|
+          DB.execute "attach '.what_to_run/run_log#{n}.db' as db#{n}"
+        end
+      end
+
+      def union_query(count)
+        (2..count).inject('') do |q, n|
+          q += " union select description, log from db#{n}.coverage"
+        end
       end
     end
 
-    private_class_method :compact
+    private_class_method :attach_databases!, :union_query
   end
 end
