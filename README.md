@@ -24,6 +24,7 @@ existing test suite.
 ## Requirements
 
 - Project must be inside a Git repository
+- CMake to build the gem
 
 ## Installation
 
