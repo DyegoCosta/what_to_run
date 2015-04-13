@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'what_to_run'
-  s.version     = '1.0.0'
+  s.version     = '1.0.2'
   s.date        = '2015-04-12'
 
   s.summary     = 'Regression test selection'
