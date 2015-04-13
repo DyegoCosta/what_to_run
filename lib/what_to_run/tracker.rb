@@ -8,8 +8,10 @@ module WhatToRun
   class Tracker
     FileUtils.mkdir_p('.what_to_run')
 
+    DB_NAME = 'run_log'.freeze
+
     DB = SQLite3::Database.open \
-      ".what_to_run/run_log#{ENV['TEST_ENV_NUMBER']}.db"
+      ".what_to_run/#{DB_NAME}#{ENV['TEST_ENV_NUMBER']}.db"
 
     class << self
       def start
@@ -39,29 +41,34 @@ module WhatToRun
 
       def read
         query = 'select description, log from coverage'
-        databases_count = Dir['.what_to_run/*.db'].length
 
-        if databases_count > 1
-          attach_databases!(databases_count)
-          query += union_query(databases_count)
+        unless additional_databases.empty?
+          attach_databases!
+          query += union_query
         end
 
-        DB.execute(query).map {|row| [row[0], Marshal.load(row[1])]}
+        DB.execute(query).map { |row| [row[0], Marshal.load(row[1])] }
       end
 
-      def attach_databases!(count)
-        (2..count).each do |n|
-          DB.execute "attach '.what_to_run/run_log#{n}.db' as db#{n}"
+      def additional_databases
+        count = Dir['.what_to_run/*.db'].length
+        (2..count).map { |n| "#{DB_NAME}#{n}" }
+      end
+
+      def attach_databases!
+        additional_databases.each do |db|
+          DB.execute "attach '.what_to_run/#{db}.db' as #{db}"
         end
       end
 
-      def union_query(count)
-        (2..count).inject('') do |q, n|
-          q += " union select description, log from db#{n}.coverage"
+      def union_query
+        additional_databases.inject('') do |query, db|
+          query += " union select description, log from #{db}.coverage"
         end
       end
     end
 
-    private_class_method :attach_databases!, :union_query
+    private_class_method :additional_databases,
+      :attach_databases!, :union_query
   end
 end
