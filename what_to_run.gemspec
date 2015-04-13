@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'what_to_run'
   s.version     = '1.0.0'
-  s.date        = '2015-03-30'
+  s.date        = '2015-04-12'
 
   s.summary     = 'Regression test selection'
   s.description = 'Predict which tests are likely to fail after you’ve changed the code'
