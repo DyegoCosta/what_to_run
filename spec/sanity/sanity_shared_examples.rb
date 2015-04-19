@@ -17,7 +17,8 @@ shared_examples 'a sanity check' do |framework, run_cmd|
 
       before do
         fork do
-          `cd #{sandbox_app_path} &&
+          `cd #{sandbox_app_path};
+            git init; git add -A; git commit -m \'Initial commit\';
             BUNDLE_GEMFILE=./Gemfile COLLECT=1 bundle exec #{run_cmd}`
         end
 
@@ -44,7 +45,7 @@ shared_examples 'a sanity check' do |framework, run_cmd|
             fork do
               reader.close
 
-              writer.write `cd #{sandbox_app_path} &&
+              writer.write `cd #{sandbox_app_path};
                 BUNDLE_GEMFILE=./Gemfile bundle exec what_to_run #{framework}`
             end
 
