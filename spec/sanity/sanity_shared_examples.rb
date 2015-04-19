@@ -1,5 +1,5 @@
 shared_examples 'a sanity check' do |framework, run_cmd|
-  describe framework do
+  describe framework, :slow do
     let(:sandbox_uuid) { SecureRandom.uuid[0..7] }
     let(:app_path) { File.expand_path('fake_app', File.dirname(__FILE__)) }
     let(:sandbox_path)  { File.expand_path(sandbox_uuid, File.dirname(__FILE__)) }
