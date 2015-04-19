@@ -7,5 +7,6 @@ group :test do
   gem 'rake-compiler'
   gem 'rspec', '~> 3.2'
   gem 'guard'
+  gem 'minitest'
   gem 'guard-rspec'
 end
