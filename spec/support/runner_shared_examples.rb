@@ -23,9 +23,9 @@ shared_examples 'a runner' do
       let(:predicted_examples) { [] }
 
       it 'exits gracefully' do
-        expect { runner.run }.to raise_error(SystemExit) { |error|
+        expect { runner.run }.to raise_error(SystemExit) do |error|
           expect(error.status).to eq(0)
-        }
+        end
       end
     end
   end
